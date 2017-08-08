@@ -19,18 +19,20 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
   console.log('New user connected');
 
+  io.emit('updateRoomList', users.getRoomList());
+
   socket.on('join', (params, callback) => {
     if (!isRealString(params.name) || !isRealString(params.room)) {
       return callback('Name and room name are required.');
     } else if (users.findUser(params.name, params.room)) {
-      return callback(`User name is in used in room: ${params.room}.`);
+      return callback(`User name: ${params.name} is in used in chat room: ${params.room}.`);
     }
 
     socket.join(params.room);
     users.removeUser(socket.id);
     users.addUser(socket.id, params.name, params.room);
     //socket.leave('The Office Fans')
-
+    io.emit('updateRoomList', users.getRoomList());
     //io.emit -> io.to('The Office Fans').emit
     //socket.broadcast.emit -> socket.broadcast.to('The Office Fans').emit
     //socket.emit
@@ -60,6 +62,8 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     var user = users.removeUser(socket.id);
+
+    io.emit('updateRoomList', users.getRoomList());
 
     if (user) {
       io.to(user.room).emit('updateUserList', users.getUserList(user.room));

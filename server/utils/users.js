@@ -1,3 +1,4 @@
+var _ = require('lodash');
 //addUser(id, name, room)
 //removeUser(id)
 //getUser(id)
@@ -34,6 +35,11 @@ class Users {
     var user = this.users.filter((user) => user.name === name && user.room === room);
 
     return user.length;
+  }
+  getRoomList () {
+    var roomArray = this.users.map((user) => user.room);
+
+    return _.uniq(roomArray);
   }
 }
 
