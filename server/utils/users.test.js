@@ -72,4 +72,16 @@ describe('Users', () => {
 
     expect(userList).toEqual(['Horace']);
   });
+
+  it('should return true if user exist in same room', () => {
+    var user = users.findUser('Aaron', 'Node Course');
+
+    expect(user).toBe(1);
+  });
+
+  it('should return false if user not exist in same room', () => {
+    var user = users.findUser('Aaron', 'React Course');
+
+    expect(user).toBe(0);
+  });
 });

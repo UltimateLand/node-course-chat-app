@@ -18,6 +18,8 @@ function scrollToButtom () {
 
 socket.on('connect', function () {
   var params = jQuery.deparam(window.location.search);
+  //set room to lowercase here
+  params.room = params.room.toLowerCase();
 
   socket.emit('join', params, function (err) {
     if (err) {

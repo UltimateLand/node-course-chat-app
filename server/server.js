@@ -22,6 +22,8 @@ io.on('connection', (socket) => {
   socket.on('join', (params, callback) => {
     if (!isRealString(params.name) || !isRealString(params.room)) {
       return callback('Name and room name are required.');
+    } else if (users.findUser(params.name, params.room)) {
+      return callback(`User name is in used in room: ${params.room}.`);
     }
 
     socket.join(params.room);
